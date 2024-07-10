@@ -1,0 +1,7 @@
+package beanshell;
+
+import bsh.Interpreter;
+
+public class Main {
+
+}

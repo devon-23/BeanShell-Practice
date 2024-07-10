@@ -1,0 +1,11 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module bsGitHub {
+	requires com.google.gson;
+	requires okhttp3;
+	requires bsh;
+}
