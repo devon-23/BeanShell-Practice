@@ -1,0 +1,5 @@
+if (user.get("role") == "admin") {
+	return "User is an admin";
+} else {
+	return "User is not an admin";
+}

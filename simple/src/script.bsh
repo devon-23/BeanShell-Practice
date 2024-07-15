@@ -1,0 +1,110 @@
+// You don't need to import the java.util.* package, or initialize it
+	
+	int a = 10;
+	int b = 5;
+	int sum = a + b;
+	
+	System.out.println("the sum of " + a + " and " + b + " is " + sum);
+	if (a < b) {
+		System.out.println(a + " is smaller than " + b);
+	} else {
+		System.out.println(b + " is smaller than " + a);
+	}
+
+	System.out.println("---------------------------------");
+// Array List
+	list = new ArrayList();
+	
+	list.add("one");
+	list.add("two");
+	list.add("three");
+	
+	System.out.println("first item: " + list.get(0));
+	System.out.println(list.size());
+	
+	// Iterate over list
+	for (item : list) {
+		System.out.println("Array List Item - " + item);
+	}
+	
+	list.remove(1);
+	list.clear();
+
+	System.out.println("---------------------------------");
+// Maps
+	map = new HashMap();
+	map.put("key1", "value1");
+	map.put("key2", "value2");
+	
+	// Iterate over map entries
+	for (entry : map.entrySet()) {
+		System.out.println("key - " + entry.getKey() + " value - " + entry.getValue());
+	}
+	
+	map.remove("key1");
+	map.clear();
+	
+	System.out.println("---------------------------------");
+// Set
+	set = new HashSet();
+	set.add("Apple");
+	set.add("Banana");
+	set.add("Orange");
+	
+	System.out.println("Set size is " + set.size());
+	
+	for (item : set) {
+		System.out.println("Set item: " + item);
+	}
+	
+	set.remove("Apple");
+	set.clear();
+	
+	System.out.println("---------------------------------");
+	
+// Array
+	array = new int[5];
+	
+	for (var i = 0; i < array.length; i++) {
+		array[i] = i + 1;
+	} 
+	
+	System.out.println("Array Element at index 2 is " + array[2]);
+	System.out.println("Array size is " + array.length);
+	array[2] = 35;
+	
+	for (int i = 0; i < array.length; i++) {
+		System.out.println("Array Element at index " + i + " is " + array[i]);
+	}
+	
+	System.out.println("---------------------------------");
+// String manipulation
+	String str1 = "Hello";
+	String str2 = "World";
+	
+	String concat = str1 + " " + str2;
+	System.out.println("Concatenated string: " + concat);
+	System.out.println("The length is " + concat.length());
+	
+	String substr = concat.substring(6);
+	System.out.println("Substring from index 6: " + substr);
+	
+	System.out.println("---------------------------------");
+
+// Methods
+	int divide(int a, int b) {
+		try {
+			return a / b;
+		} catch (ArithmeticException e) {
+			System.out.println("Artithmetic exception: Error");
+			return -1;
+		}
+	}
+	
+	result = divide(10, 2);
+	System.out.println("Result of division: " + result);
+	
+	second = divide(20, 0);
+	System.out.println("Result of second division: " + second);
+	
+	System.out.println("---------------------------------");
