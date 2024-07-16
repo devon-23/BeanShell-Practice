@@ -78,6 +78,21 @@
 	}
 	
 	System.out.println("---------------------------------");
+	
+// Hashtable
+	hashtable = new Hashtable();
+	date = new Date();
+	hashtable.put( "today", date );
+	
+	// Print the current clock value
+	print(System.currentTimeMillis());
+	
+	// Loop
+	for (i=0; i<5; i++)
+	    print(i);
+	    
+	System.out.println("---------------------------------");
+	
 // String manipulation
 	String str1 = "Hello";
 	String str2 = "World";
@@ -96,7 +111,7 @@
 		try {
 			return a / b;
 		} catch (ArithmeticException e) {
-			System.out.println("Artithmetic exception: Error");
+			System.out.println("Arithmetic exception: Error");
 			return -1;
 		}
 	}
@@ -108,3 +123,30 @@
 	System.out.println("Result of second division: " + second);
 	
 	System.out.println("---------------------------------");
+	
+// File I/O
+	filePath = "src/output.txt";
+	
+	try {
+		writer = new BufferedWriter(new FileWriter(filePath));
+		writer.write("Hello World");
+		writer.newLine();
+		writer.write("This is a test file");
+		writer.close();
+		print("File written successfully");
+	} catch (IOException e) {
+		print("Error writing to file: " + e.getMessage());
+	}
+	
+	try {
+		reader = new BufferedReader(new FileReader(filePath));
+		String line;
+		
+		while ((line = reader.readLine()) != null) {
+			print("Read line: " + line);
+		}
+		reader.close();
+	} catch (IOException e) {
+		print("Error reading from file: " + e.getMessage());
+	}
+	
