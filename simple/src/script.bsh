@@ -44,6 +44,11 @@
 	map.remove("key1");
 	map.clear();
 	
+	Map returnMap = new HashMap();
+	returnMap.put("identityAttributeName", "empId");
+	
+	print(returnMap.get("identityAttributeName"));
+	
 	System.out.println("---------------------------------");
 // Set
 	set = new HashSet();
@@ -150,3 +155,80 @@
 		print("Error reading from file: " + e.getMessage());
 	}
 	
+	System.out.println("---------------------------------");
+	
+// Logging
+	//log.info("Starting rule...");
+	//log.error("An error occurred - ");
+	
+/*
+	SailPoint
+	
+	#Identity Object
+	Identity idObj = context.getObjectByName(Identity.class, “HR App1”);
+	Identity idObj = context.getObjectById(Identity.class, “0a0000057dae1f95817dae34a9d7001f”);
+	return idObj.toXml();
+	
+	--------
+	
+	# Application Object
+	import sailpoint.object.Application;
+	Application appObj = context.getObjectByName(Application.class, “123456”);
+	List schemaList = appObj.getSchemas(); //list of schema attributes in the app
+	Application appObj = context.getObjectById(Application.class, “0a0000057dae1f95817dae3313520011”);
+	
+	--------
+	
+	# Link Object
+	import sailpoint.object.Link;
+	Link link = context.getObjectById(Link.class, "0a32423002sdfshdhkah");
+	return link.toXML();
+	
+	--------
+	
+	# Set data to Identity Object
+	import sailpoint.object.Identity
+	
+	Identity idObj = context.getObjectByName(Identity.class, "101010");
+	String locationBefore = idObj.getAttribute("location");
+	String departmentDBefore = idObj.getAttribute("department");
+	
+	String location = "USA";
+	String department = "Modeling";
+	
+	idObj.setAttribute("location", location);
+	idObj.setAttribute("department", department);
+	
+	context.saveObject(idObj); // Save object
+	context.commitTransaction(); // Commit transaction to DB
+*/
+	
+/* Notes
+
+	IIQ is about Reading the data also called Aggregation or Get
+		        Writing  the data also called Provisioning or Set
+		        
+	You can use getAttribute() method to extract any attribute by passing attribute name
+	
+	# Object API
+	Return Type		Method 		Name			Description
+	Application		getApplication()			Application where the account resides.
+	String			getApplicationId()			Gets the id of the application referenced by this link.
+	String			getApplicationName()		Gets the name of the application referenced by this link.
+	String			getAttribute(attributeName)	Gets a specific attribute value from the Link
+	Attributes		getAttributes()				Gets all the attributes associated with the Link
+	Identity		getIdentity()				Gets owning Identity
+	boolean			getIiqDisabled() 			True if link is disabled
+	boolean			getIiqLocked() 				true if link is locked
+	String			getNativeIdentity()			The "raw" account identity.
+	boolean			isDisabled() 				True if link is disabled
+	boolean			isLocked() 					true if link is locked
+	boolean			isManuallyCorrelated()		Flag to indicate account was manually correlated in the UI and the identity association should be left as is.
+	void			setAttribute(name, value)	Sets an attribute to the link
+	void			setIiqDisabled() 			Sets link as disabled status
+	void			setIiqLocked() 				sets link as locked status
+	void			setManuallyCorrelated(boolean manual) 	
+	void			setNativeIdentity(String id) 	
+	
+
+*/
