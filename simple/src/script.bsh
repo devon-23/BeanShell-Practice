@@ -201,6 +201,141 @@
 	
 	context.saveObject(idObj); // Save object
 	context.commitTransaction(); // Commit transaction to DB
+	
+	--------
+	
+	# Creating and assigning a new role
+	import sailpoint.object.Role;
+	import sailpoint.object.Identity;
+	import sailpoint.object.Application;
+	import sailpoint.object.Entitlement;
+	import sailpoint.tools.GeneralException;
+	
+	// Create new role
+	Role newRole = new Role();
+	newRole.setName("NewManagerRole");
+	newRole.setDescription("Role for the new managers");
+	
+	// Add entitlements to the role
+	Application app = context.getObjectByName(Application.class, "Active Directory");
+	Entitlement entitlement = new Entitlement();
+	entitlement.setApplication(app);
+	entitlement.setName("ManagerGround");
+	newRole.addEntitlement(entitlement);
+	
+	try {
+		// Save the new role to identity
+		context.saveObj(newRole);
+		
+		// Assign the new role to an identity
+		Identity identity = context.getObjectByName(Identity.class, "jdoe");
+		identity.addRole(newRole);
+		context.saveObject(identity);
+		
+		print("Successfully added role to " + identity.getDisplayName());
+	} catch (GeneralException e) {
+		print("Error: " + e.getMessage());
+	}
+	
+	--------
+	
+	# Attribute Manipulation
+	import sailpoint.object.Identity
+	
+	// Obtain the identity object for user "jdoe"
+	Identity identity = context.getObjectByName(Identity.class, "jdoe");
+	
+	// Get the user's email attribute
+	String email = identity.getAttribute("email");
+	print("Current email: " + email);
+	
+	// Set a new email address for the user
+	identity.setAttribute("email", "johndoe@example.com");
+	context.saveObject(identity);
+	
+	print("Updated Email: " + identity.getAttribute("email");
+	
+	--------
+	
+	# Querying and Modifying Multiple Identities
+	import sailpoint.object.Identity;
+	import sailpoint.object.QueryOptions;
+	import sailpoint.tools.GeneralException;
+	import java.util.List;
+	
+	// Define query options to retrieve all identities in the "Finance" department
+	QueryOptions qo = new QueryOptions();
+	qo.addFilter(Filter.eq("department", "Finance"));
+	
+	try {
+		// Get the list of identities matching the query
+		List<Identity> identities = context.getObjects(Identity.class, qo);
+		
+		// Loop through each identity and print their display name
+		for (Identity identity : identities) {
+			print("User: " + identity.getDisplayName());
+			
+			// Update an attribute for each identity
+			identity.setAttribute("costCenter", "newCostCenter");
+			context.saveObject(identity);
+		}
+	} catch (generalException e) {
+		print("Error: " + e.getMessage());
+	}
+	
+	--------
+	
+	# Example Joiner - Mover - Leaver Process
+	
+		# Mover
+			import sailpoint.object.Identity;
+			import sailpoint.object.Application;
+			import sailpoint.object.Entitlement;
+			import sailpoint.api.SailPointContext;
+			import sailpoint.tools.GeneralException;
+			
+			//Function to handle role changes
+			public void handleMover(SailPointContext context, Identity identity, String newRole) throws GeneralException {
+				// Remove old role
+				identity.getRoles().clear();
+				
+				// Add new role
+				Role newRoleObject = context.getObjectByName(Role.class, newRole);
+				if (newRoleObject != null) {
+					identity.addRole(newRoleObject);
+					context.saveObject(identity);
+					print("Role updated successfully for " + identity.getDisplayName());
+				} else {
+					print("Role not found: " + newRole);
+				}
+			}
+			
+			// Example usage
+			Identity identity = context.getObjectByName(Identity.class, "jdoe");
+			handleMover(context, identity, "NewRoleName");
+		
+		# Leaver
+			import sailpoint.object.Identity;
+			import sailpoint.object.Application;
+			import sailpoint.api.SailPointContext;
+			import sailpoint.tools.GeneralException;
+		
+			// Function to handle offboarding
+			public void handleLeaver(SailPointContext context, Identity identity) throws GeneralException {
+				// Deactivate identity
+				identity.setInactive(true);
+				
+				// Remove all roles and entitlements
+				identity.getRoles().clear();
+				identity.getEntitlements().clear();
+				
+				context.saveObject(identity);
+				print("User deactivated and all access removed for " + identity.getDisplayName());
+			}
+			
+			// Example usage
+			Identity identity = context.getObjectByName(Identity.class, "jdoe");
+			handleLeaver(context, identity);
 */
 	
 /* Notes
