@@ -110,6 +110,15 @@
 	System.out.println("Substring from index 6: " + substr);
 	
 	System.out.println("---------------------------------");
+	
+	// String builders
+	sb = new StringBuilder();
+	for (int i = 0; i < 10; i++) {
+		sb.append("Number: ").append(i).append("\n");
+	}
+	String sbResult = sb.toString();
+	
+	print(sbResult);
 
 // Methods
 	int divide(int a, int b) {
@@ -336,6 +345,45 @@
 			// Example usage
 			Identity identity = context.getObjectByName(Identity.class, "jdoe");
 			handleLeaver(context, identity);
+			
+	--------
+	
+	# Rules
+		# Account Provisioning
+			import sailpoint.object.ProvisioningPlan;
+			import sailpoint.object.Identity;
+			
+			Identity identity = context.getObjectByName(Identity.class, "jdoe");
+			log.info("Starting new provisioning rule for " + identity.getName());
+			
+			if (identity.getDepartment().equals("IT")) {
+				plan.add("account", "Active Directory", ProvisioningPlan.Operation.Create, "it-group");
+			}
+			
+		# Correlation Rules
+			import sailpoint.object.Link;
+			
+			Link link = new Link();
+			link.setApplication("HR System");
+			link.setAttribute("employeeId", identity.getAttribute("employeeId"));
+			return link;
+			
+			# Custom Rules
+				import sailpoint.object.Identity;
+				
+				Identity identity = context.getObjectByName(Identity.class, "jdoe");
+				identity.setAttribute("fullName", identity.getFirstName() + " " + identity.getLastName());
+				context.saveObject(identity);
+				
+	--------
+	
+	# Report
+		// Generating a report for access certification status
+		
+		ReportDefinition report = ReportDefinition();
+		report.setName("Access Certification Status");
+		report.setQuery("SELECT * FROM access_certifications WHERE status = 'Pending'");
+	
 */
 	
 /* Notes
