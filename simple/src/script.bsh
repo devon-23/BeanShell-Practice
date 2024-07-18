@@ -383,10 +383,37 @@
 		ReportDefinition report = ReportDefinition();
 		report.setName("Access Certification Status");
 		report.setQuery("SELECT * FROM access_certifications WHERE status = 'Pending'");
+		
+	--------
+	
+	# Task
+		QueryOption qo = new QueryOption();
+		qo.addFilter(Filter.and(filter.eq("Location", "Prune"), filter.eq("Inactive", false)));
+		name = "jdoe";
+		Iterator it = context.search("TaskDefinition.class", qo);
+		
+	--------
+	
+	# Set Password Task during Aggregation
+		identity.setPassword("abc123");
+		log.warn("Password created for " + identity.getName());
+		
+		-- or --
+		import sailpoint.api.PasswordGenerator // Random password generator
+		
+		try {
+			PasswordGenerator pg = new PasswordGenerator(context);
+			String password = pg.generateDefaultPassword();
+			identity.setPassword(password);
+			log.warn("Password is created for " + identity.getName() + " " + password);
+		} catch (Exception e) {
+			log.warn("Failed for: " + identity.getName());
+		}
 	
 */
 	
-/* Notes
+/* 
+	Notes
 
 	IIQ is about Reading the data also called Aggregation or Get
 		        Writing  the data also called Provisioning or Set
@@ -413,5 +440,4 @@
 	void			setManuallyCorrelated(boolean manual) 	
 	void			setNativeIdentity(String id) 	
 	
-
 */
