@@ -349,6 +349,38 @@
 	--------
 	
 	# Rules
+		
+		# Correlation Rules
+			import sailpoint.object.Link;
+			
+			Link link = new Link();
+			link.setApplication("HR System");
+			link.setAttribute("employeeId", identity.getAttribute("employeeId"));
+			return link;
+			
+			--------
+			
+			// Correlation based on email attribute
+			if (identity.getAttribute("email").equals(account.getAttribute("email"))) {
+				return true;
+			}
+			return false;
+			
+		# Identity Attribute Rules
+			// Set the department based on title
+			String title = identity.getAttribute("title");
+			if (title != null && title.contains("Manager")) {
+				return "Management";
+			} else {
+				return "Staff";
+			}
+			
+		# Certification Rules
+			// Automatically revoke access if conditions are met
+			if (certificationItem.getAttribute("riskLevel").equals("High")) {
+				certificationItem.setRevocationRequested(true);
+			}
+	
 		# Account Provisioning
 			import sailpoint.object.ProvisioningPlan;
 			import sailpoint.object.Identity;
@@ -360,20 +392,17 @@
 				plan.add("account", "Active Directory", ProvisioningPlan.Operation.Create, "it-group");
 			}
 			
-		# Correlation Rules
-			import sailpoint.object.Link;
+			--------
 			
-			Link link = new Link();
-			link.setApplication("HR System");
-			link.setAttribute("employeeId", identity.getAttribute("employeeId"));
-			return link;
+			// Add a default group to new accounts
+			accountAttributes.put("defaultGroup", "newEmployees");
 			
-			# Custom Rules
-				import sailpoint.object.Identity;
-				
-				Identity identity = context.getObjectByName(Identity.class, "jdoe");
-				identity.setAttribute("fullName", identity.getFirstName() + " " + identity.getLastName());
-				context.saveObject(identity);
+		# Custom Rules
+			import sailpoint.object.Identity;
+			
+			Identity identity = context.getObjectByName(Identity.class, "jdoe");
+			identity.setAttribute("fullName", identity.getFirstName() + " " + identity.getLastName());
+			context.saveObject(identity);
 				
 	--------
 	
@@ -409,6 +438,17 @@
 		} catch (Exception e) {
 			log.warn("Failed for: " + identity.getName());
 		}
+		
+	--------
+	
+	# Custom Rule -- Validate an Email */
+		String email = "test@example.com";
+		if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z]{2,6}$")) {
+			print("Invalid email format");
+		} else {
+			print("Valid email format");
+		}
+	/*
 	
 */
 
