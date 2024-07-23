@@ -1,5 +1,0 @@
-System.out.println("Processing API response...");
-
-response = apiResponse;
-
-return "Processed Response: " + response;

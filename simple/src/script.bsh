@@ -329,7 +329,7 @@
 			import sailpoint.api.SailPointContext;
 			import sailpoint.tools.GeneralException;
 		
-			// Function to handle offboarding
+			// Function to handle off-boarding
 			public void handleLeaver(SailPointContext context, Identity identity) throws GeneralException {
 				// Deactivate identity
 				identity.setInactive(true);
@@ -410,6 +410,76 @@
 			log.warn("Failed for: " + identity.getName());
 		}
 	
+*/
+
+/* 
+	# Examples from SailPoint community Java Docs
+	
+		# Commiting Changes to IIQ Objects
+			import sailpoint.object.Identity;
+			import sailpoint.object.QueryOptions;
+			import sailpoint.object.Filter;
+			
+			import org.apache.log4j.Logger;
+			import org.apache.log4j.Level;
+			
+			Logger log = Logger.getLogger("sailpoint.services.bshdemo");
+			// TODO: Remove this forced log level set before checking in this Rule.
+			log.setLevel(Level.DEBUG);
+			
+			// Set the "spadmin" Identity's 'email' attribute and then store it back.
+			String idName   = "spadmin";
+			String newEmail = "whiz-bang-iiq-admin@acme.com";
+			
+			// Have IdentityIQ retrieve the specific Identity object for us to modify.
+			Identity id = context.getObjectByName(Identity.class, idName);
+			if (null == id) {
+			   log.error("Could not find Identity record named: " + idName);
+			   return;
+			}
+			
+			String prevEmail = id.getEmail();
+			log.debug("Previous email for [" + idName + "] is: [" + prevEmail + "]");
+			
+			id.setEmail(newEmail);
+			
+			context.saveObject(id);
+			context.commitTransaction();
+			
+			// Now re-load the Identity to verify that the save worked the way we expected.
+			context.decache(id);
+			Identity id = context.getObjectByName(Identity.class, idName);
+			if (null == id) {
+			   log.error("Could not find Identity record named: " + idName);
+			   return;
+			}
+			
+			String currentEmail = id.getEmail();
+			log.debug("Current email for [" + idName + "] is: [" + currentEmail + "]");
+			
+			context.decache(id);
+			
+			return;
+			
+		# Checking for null values in BeanShell
+			// Lookup the 'spadmin' Identity cube record by name, then get its manager.
+			import sailpoint.object.Identity;
+			String idName = "spadmin";
+			Identity id = context.getObjectByName(Identity.class, idName);
+			if (null == id) {
+			   log.error("Could not find Identity record named: " + idName);
+			   return;
+			}
+			
+			// Get the manager for the 'spadmin' Identity object.
+			Identity mgr = id.getManager();
+			
+			// Let's pull out the first and last name fields and email fields.
+			String mgrFirstName = mgr.getFirstname();
+			String mgrLastName  = mgr.getLastname();
+			String mgrEmail     = mgr.getEmail();
+			
+			log.debug("mgrFirstName:[" + mgrFirstName + "] + mgrLastName: [" + mgrLastName + "]");
 */
 	
 /* 
