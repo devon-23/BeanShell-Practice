@@ -366,6 +366,9 @@
 			}
 			return false;
 			
+			--------
+			
+			
 		# Identity Attribute Rules
 			// Set the department based on title
 			String title = identity.getAttribute("title");
@@ -420,6 +423,20 @@
 		
 		--------
 		
+		# Custom Workflow
+			// Auto approve low-risk requests
+			
+			String riskLevel = identity.getAttribute("riskLevel");
+			
+			if ("Low".equals(riskLevel)) {
+				workflowContext.setApproved(true);
+			} else {
+				workflowContext.setApproved(false);
+			}
+			
+			return workflowContext;
+		--------
+		
 		# Managed Attribute Rule Example
 			// Set to default entitlement value based on location
 			String location = identity.getAttribute("location");
@@ -466,6 +483,18 @@
 			
 			return null;
 		 
+			--------
+			// Audit Rule to log significant identity change
+			String identityId = identity.getAttribute("identityId");
+			String action = context.getAction(); //The action being audited (e.g. CREATE, MODIFY, DELETE)
+			String attributeName = context.getAttribute("name"); // The name of the attribute being changed
+			String oldValue = context.getNewValue(); // New value of the attribute
+			
+			// Log the change
+			String logMessage = "Identity " + identityId + ": " + action + " attribute " + attributeName + " from '" + oldValue + "' to '" + newValue + "'";
+			log.info(logMessage);
+			
+			return logMessage;
 	--------
 	
 	# Report
@@ -526,6 +555,18 @@
 			return false;
 		}
 	
+	--------
+	
+	# Retrieve and Object
+		//find single object by name or id
+		getObjectByName(<Class>, name);
+		getObjectById(<Class>, id);
+		
+		Identity user = (Identity) context.getObjectByName(Identity.class, "Bob.Doe");
+		return user.getManager();
+		
+		Application app = (Application) context.getObjectById(Application.class, "4234293849238afeff90898ff00029");
+		return app.getName();
 */
 
 /* 
@@ -579,6 +620,77 @@
 			
 		# Checking for null values in BeanShell
 			// Lookup the 'spadmin' Identity cube record by name, then get its manager.
+			import sailpoint.object.Identity;
+			String idName = "spadmin";
+			Identity id = context.getObjectByName(Identity.class, idName);
+			if (null == id) {
+			   log.error("Could not find Identity record named: " + idName);
+			   return;
+			}
+			
+			// Get the manager for the 'spadmin' Identity object.
+			Identity mgr = id.getManager();
+			
+			// Let's pull out the first and last name fields and email fields.
+			String mgrFirstName = mgr.getFirstname();
+			String mgrLastName  = mgr.getLastname();
+			String mgrEmail     = mgr.getEmail();
+			
+			log.debug("mgrFirstName:[" + mgrFirstName + "] + mgrLastName: [" + mgrLastName + "]");
+			
+		# Commiting changes to the IIQ Objects
+			context.saveObject() 		- 	saves the in-RAM state of an object to the database, but does not COMMIT the changes to the database
+			context.commitTransaction() - 	commits all objects that have had saveObject() called on them to the relational data store
+			context.rollbackTransaction() - aborts the current transaction and forgets the state and list of objects that have had saveObject() called
+		
+			import sailpoint.object.Identity;
+			import sailpoint.object.QueryOptions;
+			import sailpoint.object.Filter;
+			
+			import org.apache.log4j.Logger;
+			import org.apache.log4j.Level;
+			
+			Logger log = Logger.getLogger("sailpoint.services.bshdemo");
+			// TODO: Remove this forced log level set before checking in this Rule.
+			log.setLevel(Level.DEBUG);
+			
+			// Set the "spadmin" Identity's 'email' attribute and then store it back.
+			String idName   = "spadmin";
+			String newEmail = "whiz-bang-iiq-admin@acme.com";
+			
+			// Have IdentityIQ retrieve the specific Identity object for us to modify.
+			Identity id = context.getObjectByName(Identity.class, idName);
+			if (null == id) {
+			   log.error("Could not find Identity record named: " + idName);
+			   return;
+			}
+			
+			String prevEmail = id.getEmail();
+			log.debug("Previous email for [" + idName + "] is: [" + prevEmail + "]");
+			
+			id.setEmail(newEmail);
+			
+			context.saveObject(id);
+			context.commitTransaction();
+			
+			// Now re-load the Identity to verify that the save worked the way we expected.
+			context.decache(id);
+			Identity id = context.getObjectByName(Identity.class, idName);
+			if (null == id) {
+			   log.error("Could not find Identity record named: " + idName);
+			   return;
+			}
+			
+			String currentEmail = id.getEmail();
+			log.debug("Current email for [" + idName + "] is: [" + currentEmail + "]");
+			
+			context.decache(id);
+			
+			return;
+			
+		# Checking for null Values in Bean Shell
+			// Lookup the 'spadmin' Identity cube record by name, then get its manager.
+			
 			import sailpoint.object.Identity;
 			String idName = "spadmin";
 			Identity id = context.getObjectByName(Identity.class, idName);

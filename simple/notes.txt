@@ -1,0 +1,34 @@
+# Connection Configuration
+	LDAP Connector
+		<Connector name="LDAPConnector" class="sailpoint.connector.ldap.LDAPConnector">
+			<Configuration>
+				<Entry key="host" value="ldap.example.com" />
+				<Entry key="port" value="389" />
+				<Entry key="username" value="cn=admin, dc=example,dc=com" />
+				<Entry key="password" value="securePassword123" />
+				<Entry key="baseDN" value="dc=example,dc=com" />
+				<Entry key="useSSL" value="false" />
+			</Configuration>
+		</Connector>
+		
+# JavaDoc IIQ
+	# sailpoint.api
+		- SailPoint Context
+		- Emailer
+	# sailpoint.connector
+		- DelimitedFile
+		- JDBC Connector
+		- Abstract class for creating custom connectors
+	# sailpoint.object
+		- Identity
+		- Link
+		- Bundle
+		- Application
+		- ManagedAttribute
+		- Provisioning Plan
+		- Provisioning Project
+		- Filter
+	# sailpoint.task
+		- Abstract Task for creating custom Tasks
+	# sailpoint.tools
+		- Util objects (lots of utility methods for SailPoint development)
