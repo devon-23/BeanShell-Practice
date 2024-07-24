@@ -361,8 +361,8 @@
 			--------
 			
 			// Correlation based on email attribute
-			if (identity.getAttribute("email").equals(account.getAttribute("email"))) {
-				return true;
+			if (identityEmail != null && identity.getAttribute("email").equals(account.getAttribute("email"))) {
+				return true; // Account matches the identity
 			}
 			return false;
 			
@@ -403,7 +403,69 @@
 			Identity identity = context.getObjectByName(Identity.class, "jdoe");
 			identity.setAttribute("fullName", identity.getFirstName() + " " + identity.getLastName());
 			context.saveObject(identity);
-				
+			
+			--------
+			
+			// Custom Task Rule to update an attribute for all identities
+			IdentityService identityService = context.getObjectByName(Identity
+			
+		--------
+		
+		# Transformation Rule
+			// Concatenate firstName and lastName to form the display name before it is mapped into SailPoint
+			String firstName = account.getAttribute("givenName");
+			String lastName = account.getAttribute("sn");
+			
+			return firstName + " " + lastName;
+		
+		--------
+		
+		# Managed Attribute Rule Example
+			// Set to default entitlement value based on location
+			String location = identity.getAttribute("location");
+			String entitlementVale;
+			
+			if ("New York".equals(location)) {
+				entitlementValue = "NY_Default";
+			} else {
+				entitlementValue = "Default";
+			}
+			
+			entitlement.setValue(entitlementValue);
+			return entitlement;
+			
+		--------
+		 
+		# Entitlement Grant Rule
+			// Automatically grant additional Entitlement
+			String role = identity.getRole();
+			String additionalEntitlement = "SpecialAccess";
+			
+			if ("Admin".equals(role)) {
+				identity.addEntitlement(additionalEntitlement);
+			}
+			return;
+		
+		--------
+		
+		# Audit Rule
+			// Check for mandatory attributes
+			List<String> mandatoryAttributes = Arrays.asList("email", "firstName", "lastName");
+			boolean missingAttribute = false;
+			
+			for (String attribute : mandatoryAttributes) {
+				if (identity.getAttribute(attribute) == null) {
+					log.warn("Missing mandatory attribute: " + attribute);
+					missingAttribute = true;
+				}
+			}
+			
+			if (missing Attribute) {
+				return "Some mandatory attributes are missing.");
+			}
+			
+			return null;
+		 
 	--------
 	
 	# Report
@@ -437,6 +499,8 @@
 			log.warn("Password is created for " + identity.getName() + " " + password);
 		} catch (Exception e) {
 			log.warn("Failed for: " + identity.getName());
+		} finally {
+			log.warn("try catch is failed, please check the code again.");
 		}
 		
 	--------
@@ -449,6 +513,18 @@
 			print("Valid email format");
 		}
 	/*
+		// Validate Password creation
+		String password = identity.getPassword();
+		boolean hasUpper = password.matches(".*[A-Z].*");
+		boolean hasLower = password.matches(".*[a-z].*");
+		boolean hasDigit = password.matches(".*\\d.*");
+		boolean hasSpecial = password.matches(".*[!@#$%^&*()].*");
+		
+		if (hasUpper && hasLower && hasDigit && hasSpecial) {
+			return true;
+		} else {
+			return false;
+		}
 	
 */
 
