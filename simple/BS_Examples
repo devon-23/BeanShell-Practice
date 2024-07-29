@@ -1,0 +1,93 @@
+# Example Rules
+	// Input variables
+	identity = (Identity) context.getVariable("identity");
+	application = (Application) context.getVariable("application");
+	
+	// Custom Logic
+	if (identity.getDisplayName().equals("John Doe")) {
+		application.setAttribute("role", "Admin");
+	}
+	
+	// Returning the application 
+	return application;
+	
+# Workflow Steps
+	import sailpoint.object.Workflow;
+	import sailpoint.api.SailPointContext;
+	import sailpoint.tools.GeneralException;
+	
+	// Input Variables
+	Workflow workflow = (Workflow) context.getVariable("workflow");
+	
+	// Custom Logic
+	if (workflow.getName().equals("Access Request")) {
+		// Perform actions
+		workflow.setVariable("approved", true);
+	} else {
+		workflow.setVariable("approved", false);
+	}
+	
+	// Return the workflow
+	return workflow;
+	
+# Transformations
+	import sailpoint.object.Identity;
+	import sailpoint.object.Link;
+	
+	// Input Variables
+	Identity identity = (Identity) context.getVariables("identity");
+	Link link = (Link) context.getVariable("link");
+	
+	// Custom transfomation logic
+	if (identity.getAttribute("department").equals("IT")) {
+		link.setAttribute("accessLevel", "High");
+	} else {
+		link.setAttribute("accessLevel", "Low");
+	}
+	
+	// Returning the link
+	return link;
+	
+# Report
+	import sailpoint.api.SailPointContext;
+	import sailpoint.object.Filter;
+	import sailpoint.object.Identity;
+	import sailpoint.tools.GeneralException;
+	
+	// Query to fetch Identities
+	List identities = context.getObjects(Identity.class, Filter.eq("department", "Finance"));
+	
+	// Generate report data
+	for (Identity identity : identities) {
+		// Add data to report
+		context.getReportWriter().writeRow(identitiy.getDisplayName(), identity.getEmail());
+	}
+	
+	// Return report data
+	return context.getReportWrtier().getOutput();
+	
+# Provisioning Rule
+	import sailpoint.object.Identity;
+	import sailpoint.object.Application;
+	import sailpoint.object.Attributes;
+	import sailpoint.api.SailPointContext;
+	import sailpoint.tools.GeneralException;
+	
+	// Input Variables
+	SailPointConext context = (SailPointContext) context;
+	Identity identity = (Identity) context.getVariable("identity");
+	Application application = (Application) context.getVariable("application");
+	
+	// Get identity department
+	String department = identity.getAttribute("department");
+	
+	// Check department and add role
+	if ("IT".equals(department)) {
+		Attributes attrs = new Attributes();
+		attrs.put("role", "Admin");
+		
+		application.setAttributes(attrs);
+	}
+	
+	// Returning the application
+	return application;
