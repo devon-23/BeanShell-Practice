@@ -1,0 +1,17 @@
+now = new Date();
+
+System.out.println("Current date and time: " + now);
+
+list = new ArrayList();
+list.add("Hello");
+list.add("World");
+
+for (Object item : list) {
+	System.out.println(item);
+}
+
+int multiply(int a, int b) {
+	return a * b;
+}
+
+System.out.println(multiply(5, 10));

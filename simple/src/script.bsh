@@ -3,6 +3,7 @@
 	int a = 10;
 	int b = 5;
 	int sum = a + b;
+	vars = new Hashtable();
 	
 	System.out.println("the sum of " + a + " and " + b + " is " + sum);
 	if (a < b) {
@@ -10,6 +11,10 @@
 	} else {
 		System.out.println(b + " is smaller than " + a);
 	}
+	
+	print("printing...");
+	vars.put("a", "Test");
+	print(vars.get("a"));
 
 	System.out.println("---------------------------------");
 // Array List
