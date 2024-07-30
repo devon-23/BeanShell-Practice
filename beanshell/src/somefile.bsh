@@ -1,2 +1,35 @@
 System.out.println("BeanShell Application");
 
+users = new ArrayList();
+users.add("Alice");
+users.add("Bob");
+users.add("Charlie");
+
+for (user : users) {
+	System.out.println("User: " + user);
+}
+
+users.remove("Bob");
+
+System.out.println("Remaining Users: ");
+for (user : users) {
+	System.out.println("User: " + user);
+}
+
+int factorial(int n) {
+	if (n <= 1) return 1;
+	else return n * factorial(n-1);
+}
+
+int result = factorial(5);
+System.out.println("Factorial of 5 is " + result);
+
+a = 10;
+b = 20;
+System.out.println(a + b);
+
+map = new HashMap();
+map.put("key1", "value1");
+map.put("key2", "value2");
+
+print("Value for key1 " + map.get("key1"));

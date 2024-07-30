@@ -212,3 +212,11 @@
 	context.startTransaction();  
 	context.saveObject(item);  
 	context.commitTransaction(); 
+	
+# Query Options
+	import sailpoint.object.QueryOptions;
+	
+	QueryOptions qo = new QueryOptions();
+	Filter f1 = Filter.eq("links.application.name", "Active Directory");
+	qo.addFilter(f1);
+	List accounts = context.getObjects(Identity.class, qo);
