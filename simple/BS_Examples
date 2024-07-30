@@ -1,4 +1,5 @@
 # Example Rules
+	# This script adds an "Admin" role to an application if the identity's display name is "John Doe"
 	// Input variables
 	identity = (Identity) context.getVariable("identity");
 	application = (Application) context.getVariable("application");
@@ -12,6 +13,7 @@
 	return application;
 	
 # Workflow Steps
+	# Script sets an approval variable based on the workflow name
 	import sailpoint.object.Workflow;
 	import sailpoint.api.SailPointContext;
 	import sailpoint.tools.GeneralException;
@@ -31,6 +33,7 @@
 	return workflow;
 	
 # Transformations
+	# Script sets the access level attribute on a link object based on the identity's department
 	import sailpoint.object.Identity;
 	import sailpoint.object.Link;
 	
@@ -49,6 +52,7 @@
 	return link;
 	
 # Report
+	# Script generates a report of all identities in the "Finance" department, outputting their display names and email addresses
 	import sailpoint.api.SailPointContext;
 	import sailpoint.object.Filter;
 	import sailpoint.object.Identity;
@@ -91,3 +95,120 @@
 	
 	// Returning the application
 	return application;
+	
+# Get first and last name of an identity
+	import java.util.Map;
+	import java.util.HashMap;
+	import sailpoint.api.SailPointContext;
+	import sailpoint.object.Identity;
+	
+	public Map getIdentityAttributes(String Identity) {
+		Map idenAttributeMap = new HashMap();
+		Identity iden = context.getObjectByName(Identity.class, identity);
+		
+		//print all attributes of an identity.
+		//return iden.toXml();
+		
+		//get FirstName of an Identity
+		if (iden.getFirstName() != null) {
+			idenAttributeMap.put("firstName", iden.getFirstName());
+		} else {
+			idenAttributeMap.put("firstName", "");
+		}
+		
+		//get LastName of an Identity
+		if (iden.getLastName() != null) {
+			idenAttributeMap.put("LastName", iden.getFirstName());
+		} else {
+			idenAttributeMap.put("LastName", "");
+		}
+		
+		//get email of an Identity
+		if (iden.getEmail() != null) {
+			idenAttributeMap.put("firstName", iden.getEmail());
+		} else {
+			idenAttributeMap.put("email", "");
+		}
+	}
+	//call the method by passing any identity employee id
+	getIdentityAttributes("123456");
+	
+# Get an attribute value of an identity
+	import java.util.Map;
+	import java.util.HashMap;
+	import sailpoint.api.SailPointContext;
+	import sailpoint.object.Identity;
+	
+	Map idenAttributeMap = new HashMap();
+	Identity iden = context.getObjectByName(Identity.class, "12345");
+	
+	//print all attributes of an identity.
+	//return iden.toXml();
+	
+	//get the phonenumber
+	return iden.getAttribute("phonenumber");
+	
+	//get firstName
+	//return iden.getAttribute("firstName");
+	
+# Get all links of an identity in an applications
+	import java.util.Map;
+	import java.util.HashMap;
+	import sailpoint.api.SailPointContext;
+	import sailpoint.object.Identity;
+	
+	IdentityService idSer = new IdentityService(context);
+	
+	//Get the identity object  
+	Identity idn = context.getObectByName("12345");
+	
+	//get the application object from application name.
+	Application app = context.getObjectByName("ServiceNow");
+	
+	//identityService.getLinks will return all the links of identity
+	return idSer.getLinks(idn, app);
+	
+# Create a sequence number for workitem
+	import sailpoint.persistence.Sequencer;
+	import sailpoint.object.WorkItem;
+	
+	//create object of workitem
+	WorkItem item = new WorkItem();
+	
+	//create object of Sequence class
+	Sequencer seq = new Sequencer();
+	
+	return seq.generateId(context, item);
+	
+# Create workItem
+	//create object of workitem
+	WorkItem item = new WorkItem();
+	item.setType(WorkItem.Type.ManualAction);
+	item.setOwner("set the owner");
+	Sequencer sequencer = new Sequencer();  
+	item.setName(sequencer.generateId(context, item));  
+	item.setRenderer("lcmManualActionsRenderer.xhtml");  
+	item.setLevel(WorkItem.Level.Normal);  
+	item.setTarget("target identity name");  
+	item.setTargetClass(Identity.class.getName());  
+	item.setDescription(itemDesc);  
+	item.setHandler("sailpoint.api.Workflower");  
+	item.setIdentityRequestId("put_identity_request_id");  
+	
+	Attributes attributes = new Attributes();  
+	item.setAttributes(attributes);  
+	ApprovalSet approvalSet = new ApprovalSet();
+	ApprovalItem approvalItem = new ApprovalItem();  
+	approvalItem.setApplication("put_name_of_the_application);  
+	approvalItem.setNativeIdentity("put_target_identity_name");  
+	approvalItem.setOperation(operation);  
+	approvalItem.setValue(itemValue);  
+	approvalSet.add(approvalItem);
+	            
+	attributes.put("approvalSet", approvalSet);  
+	attributes.put("identityDisplayName", "put_display_name_of_target_identity");  
+	attributes.put("identityName", "put_target_identity_name");
+	
+	context.startTransaction();  
+	context.saveObject(item);  
+	context.commitTransaction(); 

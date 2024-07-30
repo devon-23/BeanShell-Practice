@@ -32,3 +32,12 @@
 		- Abstract Task for creating custom Tasks
 	# sailpoint.tools
 		- Util objects (lots of utility methods for SailPoint development)
+		
+BeanShell Notes
+	SailPoint IIQ uses beanshell in:
+		# Rules - Custom logic that can be invoked at various points in a workflow
+				- Scripts that execute custom logic at specific points within the identity governance lifecycle. They can be invoked during different stages, such as provisioning, de-provisioning, and access requests.
+		# Workflow Steps - Defining steps in a workflow process
+						-  Define a sequence of steps to accomplish a business process, like provisioning or certification. Each step can be a script, approval, sub-workflow, or system step.
+		# Transformations - Manipulating data during the identity aggregation or provisioning processes
+		# Reports - Customizing report data generation and formatting
