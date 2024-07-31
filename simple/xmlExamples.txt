@@ -1,0 +1,169 @@
+Getting started with SailPoint IIQ Development
+Code and examples taken from https://developer.sailpoint.com/discuss/t/getting-started-with-sailpoint-iiq-development/37391/2
+
+# Rules
+	# Rule - Get Data
+		<?xml version='1.0' encoding='UTF-8'?>
+		<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+		<Rule created="" id="" language="beanshell" modified="" name="Main-Get Data">
+		  <Source>
+		  import sailpoint.object.Identity; //Import Identity class
+		
+		  Identity identity = context.getObjectByName(Identity.class, "101010"); //construct identity object
+		
+		  String firstName = identity.getAttribute("firstname");
+		  String lastName = identity.getAttribute("lastname");
+		  String email = identity.getAttribute("email");
+		
+		  log.error("first name is ::"+firstName);
+		  log.error("last name is ::"+lastName);
+		  log.error("email is ::"+email);
+		
+		  return firstName + "\n" + lastName + "\n" + email;
+		
+		  </Source>
+		</Rule>
+		
+	# Rule - Set Data to Identity Object
+		<?xml version='1.0' encoding='UTF-8'?>
+		<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+		<Rule created="" id="" language="beanshell" modified="" name="Main-Set Data">
+		  <Source>
+		  import sailpoint.object.Identity; //Import Identity class
+		  
+		  Identity identity = context.getObjectByName(Identity.class, "101010"); //construct identity object
+		  
+		  String locationBefore = identity.getAttribute("location");
+		  String departmentBefore = identity.getAttribute("department");
+		  
+		  String location = "USA";
+		  String department = "Modelling";
+		  
+		  identity.setAttribute("location", location); //set location attribute
+		  identity.setAttribute("department", department); ////set department attribute
+		  
+		  context.saveObject(identity); //Save the object
+		  context.commitTransaction(); //commit the transaction to DB
+		  </Source>
+		</Rule>
+		
+# Application
+	# Coding on application Object
+		<?xml version='1.0' encoding='UTF-8'?>
+		<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+		<Rule created="" id="" language="beanshell" modified="" name="Main-Application">
+		  <Source>
+		  import sailpoint.object.Application;
+		  
+		  Application application = context.getObjectByName(Application.class, "HR App1");
+		  
+		  return application.toXml();
+		  
+		  </Source>
+		</Rule>
+	# Another example
+		<?xml version='1.0' encoding='UTF-8'?>
+		<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+		<Rule created="" id="" language="beanshell" modified="" name="Main-Application">
+		  <Source>
+		  import sailpoint.object.Application;
+		  
+		  Application application = context.getObjectByName(Application.class, "HR App1");
+		  
+		  List schemaList = application.getSchemas();
+		  String featureString = application.getFeaturesString();
+		  String type = application.getType();
+		  
+		  return type + "\n" + featureString + "\n" + schemaList.get(0).toXml();
+		  
+		  </Source>
+		</Rule>
+		
+# Link Object
+	# Coding for link object
+		<?xml version='1.0' encoding='UTF-8'?>
+		<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+		<Rule created="" id="" language="beanshell" modified="" name="Main-Link">
+		  <Source>
+		  import sailpoint.object.Link;
+		  
+		  Link link = context.getObjectById(Link.class, "c0a8b2648a181397818a4c58f3b91620");
+		  
+		  return link.toXml();
+		  
+		  </Source>
+		</Rule>
+		
+	# Fetch all the links (accounts) for a user
+		<?xml version='1.0' encoding='UTF-8'?>
+		<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+		<Rule created="" id="" language="beanshell" modified="" name="Main-Link">
+		  <Source>
+		  import sailpoint.object.Link;
+		  import sailpoint.object.Identity;
+		  
+		  //Link link = context.getObjectBy(Link.class, "c0a8b2648a181397818a4c58f3b91620");
+		  
+		  Identity identity = context.getObjectByName(Identity.class, "101010");
+		  
+		  return identity.getLinks();
+		  
+		  </Source>
+		</Rule>
+		
+# Relationship between Identity, Application, and Link Object
+	# Fetch link (account) for user on a specific application
+		<?xml version='1.0' encoding='UTF-8'?>
+		<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+		<Rule created="" id="" language="beanshell" modified="" name="Main-Link">
+		  <Source>
+		  import sailpoint.object.Link;
+		  import sailpoint.object.Identity;
+		  import sailpoint.object.Application;
+		  import sailpoint.api.IdentityService;
+		  
+		  //Link link = context.getObjectBy(Link.class, "c0a8b2648a181397818a4c58f3b91620");
+		  
+		  Identity identity = context.getObjectByName(Identity.class, "101010");
+		  Application application = context.getObjectByName(Application.class, "HR App1");
+		  
+		  IdentityService idSvc = new IdentityService(context);
+		  
+		  List links = idSvc.getLinks(identity, application);
+		  
+		  return links;  
+		  
+		  </Source>
+		</Rule>
+		
+	# Get specific link for a user
+		<?xml version='1.0' encoding='UTF-8'?>
+		<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+		<Rule created="" id="" language="beanshell" modified="" name="Main-Link">
+		  <Source>
+		  import sailpoint.object.Link;
+		  import sailpoint.object.Identity;
+		  import sailpoint.object.Application;
+		  import sailpoint.api.IdentityService;
+		  
+		  //Link link = context.getObjectBy(Link.class, "c0a8b2648a181397818a4c58f3b91620");
+		  
+		  Identity identity = context.getObjectByName(Identity.class, "101010");
+		  Application application = context.getObjectByName(Application.class, "HR App1");
+		  
+		  IdentityService idSvc = new IdentityService(context);
+		  
+		  List links = idSvc.getLinks(identity, application);
+		  
+		  //return links;
+		  
+		  Link link = links.get(0);
+		  
+		  String empId = link.getAttribute("EmployeeID");
+		  String firstName = link.getAttribute("FirstName");
+		  String lastname = link.getAttribute("LastName");;
+		  
+		  return "Employee ID :: " + empId + "\nFirst Name :: " + firstName + "\nLast Name :: " + lastname;
+		  
+		  </Source>
+		</Rule>
