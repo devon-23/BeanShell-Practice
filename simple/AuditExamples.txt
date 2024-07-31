@@ -1,0 +1,57 @@
+Custom Auditing with IdentityIQ
+https://community.sailpoint.com/t5/IdentityIQ-Wiki/Custom-auditing-with-IdentityIQ/ta-p/81221
+
+Setup a new AuditAction
+	1. Setup a new AuditAction in the AuditConfig object
+		From the debug page, add the following to the AuditConfig object:
+
+		<AuditAction displayName="Custom New Audit Event for Chris" enabled="true" name="didsomething"/>
+	
+Call the audit functions
+	2. Call the audit functions from beanshell in a rule, task or workflow step as needed
+
+ 		The signature for the logAs function is:
+		
+			static public boolean logAs(String actor, String action, String target, String arg1, String arg2, String arg3, String arg4) {
+				import sailpoint.server.Auditor;
+				Auditor.logAs("source", "didsomething", "target","string1", "string2", "string3", "string4");       
+
+                context.commitTransaction();
+
+			Alternatively, you can add a check so that you only create a log  entry if the type of event you are interested in logging is turned on in the UI (i.e. that it's enabled)
+
+		if (Auditor.isEnabled("didsomething")) {
+		
+		      Auditor.logAs("source", "didsomething", "target","string1", "string2", "string3", "string4");
+		
+		     context.commitTransaction();
+		
+		}
+		This will cause the audit event to only be written if you have the "didsomething" audit event turned on in the UI (i.e. enabled).
+
+Check your audit event
+	3. Check to see that your audit event was created successfully:
+		From the debug page or Advanced Analytics, search for Audit events:
+		<?xml version='1.0' encoding='UTF-8'?>
+		
+		<!DOCTYPE AuditEvent PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+		
+		<AuditEvent action="didsomething" source="source" target="target">
+		
+		  <String1>string1</String1>
+		
+		  <String2>string2</String2>
+		
+		  <String3>string3</String3>
+		
+		  <String4>string4</String4>
+		
+		</AuditEvent>
+
+
+
+Of course, you can replace all the actor, target and string 1 through string 4 with your own custom audit information.
+
+ 
+
+The key thing is that the action parameter matches the name of the AuditAction object ("didsomething" in our example.)
