@@ -38,5 +38,10 @@ public class Main {
 		// Convert to string
 		String finalStr = sb.toString();
 		System.out.println("Final String: " + sb);
+		
+		String test = "Hello";
+		StringBuffer testEx = new StringBuffer(test);
+		testEx.reverse();
+		System.out.println(testEx);
 	}
 }
