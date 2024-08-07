@@ -1,0 +1,18 @@
+MyAccess (SailPoint) Functional Design
+
+	Objectives include the build out and demonstration of the following in the new on-prem production environment: 
+		• End User Access Request Process
+			− Requesting base accounts and roles
+			− Password reset
+			− Removing account access
+		• Critical automated lifecycle events (Mover & Leaver)
+		• Governance appliances (access reviews & audit reports) 
+
+	Platform Requrements
+		- The system’s primary authoritative source of identities must be the Workday HR system. 
+		- The system must correlate these identities from Workday with the accounts found on AD using the using the employee number to the Id
+		- The system must also correlate the the ADP user id from the ADP application
+	
+	Life Cycle FrameWork Requirements
+		- Upon detecting an employee or contractor record goes “inactive” in Workday, the system triggers the deprovisioning logic for the 2 pilot applications (See the Leaver Functionality for details)
+		- Upon detecting a job change for an employee or contractor record in Workday, the system triggers a mover event (See the Mover Functionality for details)
