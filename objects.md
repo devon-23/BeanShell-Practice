@@ -26,7 +26,7 @@ Here's a more detailed look into each of the objects in SailPoint that BeanShell
    
       // Save the updated identity
       context.saveObject(identity);
-      ```
+   ```
 
 ### 2. **Application Objects**:
    - **Application**: This object represents an external application integrated with SailPoint, like Active Directory or Salesforce. It contains connection details (e.g., URLs, credentials) and schema definitions (which attributes are available for reading/writing). It’s vital for managing how SailPoint interacts with other systems.
@@ -54,22 +54,22 @@ Here's a more detailed look into each of the objects in SailPoint that BeanShell
 
    // Modify connection details
    app.setAttribute("timeout", "30");
-   ```
+```
 
 ### 3. **Task Objects**:
    - **TaskDefinition**: Represents a scheduled or on-demand task in SailPoint, such as data aggregation, certification, or a report. It includes details about what the task does and how it should be executed.
      ```java
-      // Retrieve a TaskDefinition object
-      TaskDefinition taskDef = context.getObjectByName(TaskDefinition.class, "DailyAggregation");
-   
-      // Create a new TaskResult
-      TaskResult result = new TaskResult();
-      result.setStatus(TaskResult.Status.SUCCESS);
-      result.setMessage("Task completed successfully.");
-   
-      // Log task result
-      log.info("Task Result: " + result.getStatus() + " - " + result.getMessage());
-   ```
+         // Retrieve a TaskDefinition object
+         TaskDefinition taskDef = context.getObjectByName(TaskDefinition.class, "DailyAggregation");
+      
+         // Create a new TaskResult
+         TaskResult result = new TaskResult();
+         result.setStatus(TaskResult.Status.SUCCESS);
+         result.setMessage("Task completed successfully.");
+      
+         // Log task result
+         log.info("Task Result: " + result.getStatus() + " - " + result.getMessage());
+      ```
    - **TaskResult**: Holds the outcome of a task execution, including whether it succeeded, failed, and any errors encountered. It’s useful for tracking the status of background processes and for debugging issues.
 
 ### 4. **Map Objects**:
@@ -95,20 +95,20 @@ Here's a more detailed look into each of the objects in SailPoint that BeanShell
    - **ProvisioningProject**: Manages the execution of a provisioning plan, tracking the status of each work item. This object is used to ensure that the provisioning actions are carried out and can also manage rollback in case of failure.
 
      ```java
-      // Create a new ProvisioningPlan
-      ProvisioningPlan plan = new ProvisioningPlan();
-   
-      // Add an account creation request to the plan
-      Map<String, Object> accountAttributes = new HashMap<>();
-      accountAttributes.put("username", "jdoe");
-      accountAttributes.put("email", "jdoe@example.com");
-   
-      ProvisioningPlan.AccountRequest request = new ProvisioningPlan.AccountRequest(ProvisioningPlan.Operation.Create, accountAttributes);
-      plan.add(request);
-   
-      // Execute the provisioning plan
-      context.getProvisioningService().executePlan(plan);
-   ```
+         // Create a new ProvisioningPlan
+         ProvisioningPlan plan = new ProvisioningPlan();
+      
+         // Add an account creation request to the plan
+         Map<String, Object> accountAttributes = new HashMap<>();
+         accountAttributes.put("username", "jdoe");
+         accountAttributes.put("email", "jdoe@example.com");
+      
+         ProvisioningPlan.AccountRequest request = new ProvisioningPlan.AccountRequest(ProvisioningPlan.Operation.Create, accountAttributes);
+         plan.add(request);
+      
+         // Execute the provisioning plan
+         context.getProvisioningService().executePlan(plan);
+      ```
 
 ### 6. **Request Objects**:
    - **Request**: A generic object that represents any request in SailPoint, like a request for an approval, identity change, or access to a resource. It’s a flexible object used in workflows to trigger different actions based on user or system input.
@@ -130,17 +130,17 @@ Here's a more detailed look into each of the objects in SailPoint that BeanShell
 ### 7. **Schema Objects**:
    - **Schema**: Defines the structure of data for an application, specifying which attributes can be read, written, or used for correlation during identity aggregation. The schema object allows rules to interact with the application data in a structured way.
      ```java
-      // Retrieve an Application object
-      Application app = context.getObjectByName(Application.class, "HRSystem");
-   
-      // Get the schema for the application
-      Schema schema = app.getSchema();
-   
-      // Print schema details
-      for (AttributeDefinition attr : schema.getAttributes()) {
-          log.info("Schema Attribute: " + attr.getName() + " - " + attr.getType());
-      }
-   ```
+         // Retrieve an Application object
+         Application app = context.getObjectByName(Application.class, "HRSystem");
+      
+         // Get the schema for the application
+         Schema schema = app.getSchema();
+      
+         // Print schema details
+         for (AttributeDefinition attr : schema.getAttributes()) {
+             log.info("Schema Attribute: " + attr.getName() + " - " + attr.getType());
+         }
+      ```
   
 ### 8. **Context Objects**:
    - **SailPointContext**: Provides access to the current state of the SailPoint environment, including session data, logged-in user details, and other global objects. It’s often used in rules to interact with SailPoint services, fetch objects, or perform broader system actions.
@@ -161,17 +161,17 @@ Here's a more detailed look into each of the objects in SailPoint that BeanShell
    - **Exception Handling**: Essential for managing errors in rules. Proper error handling using try-catch blocks ensures that rules can gracefully manage unexpected situations, such as null values or failed external system calls.
 
      ```java
-      try {
-          // Example code that may throw an exception
-          String value = (String) context.getAttribute("someAttribute");
-   
-          // Log information
-          log.info("Attribute Value: " + value);
-      } catch (Exception e) {
-          // Log error
-          log.error("Error occurred: " + e.getMessage());
-      }
-   ```
+         try {
+             // Example code that may throw an exception
+             String value = (String) context.getAttribute("someAttribute");
+      
+             // Log information
+             log.info("Attribute Value: " + value);
+         } catch (Exception e) {
+             // Log error
+             log.error("Error occurred: " + e.getMessage());
+         }
+      ```
 
 ### 10. **Aggregation Objects**:
    - **Aggregation**: This process gathers identity data from external sources into SailPoint. Aggregation objects help manage the flow of data from applications into SailPoint's identity warehouse, allowing for updates to user profiles, roles, and entitlements based on external data.
