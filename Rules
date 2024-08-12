@@ -1,0 +1,54 @@
+SailPoint Rules Documentation Summary
+
+Overview
+  Purpose: SailPoint rules allow for custom logic and automation in identity management processes within the SailPoint IdentityNow platform.
+
+  Flexibility: Rules can be used for a variety of tasks including provisioning, de-provisioning, and access certifications.
+
+
+Types of Rules
+  Identity Rules: Manage operations related to identities, such as attribute updates or specific identity-based actions.
+
+  Application Rules: Handle application-specific logic, such as provisioning or de-provisioning users to applications.
+
+  Certification Rules: Control the behavior of access review and certification processes.
+
+
+Rule Creation
+  Script Language: Rules are written in BeanShell, a scripting language similar to Java.
+
+  Creating Rules: Navigate to the "Rules" section in SailPoint IdentityNow, choose the rule type, and write the necessary script.
+
+  Example: A rule might involve checking an identity's attributes or managing how applications handle provisioning tasks.
+
+
+Testing and Debugging
+  Testing: It’s important to test rules in a development environment before deploying them to production.
+
+  Debugging: Use SailPoint’s logging tools to help identify and fix issues in your rules.
+
+
+Deployment
+  Deploying: Once tested, rules can be deployed to the production environment.
+
+  Monitoring: After deployment, monitor the rules to ensure they perform as expected.
+
+
+Best Practices
+  Simplicity: Start with simple rules and add complexity gradually.
+
+  Documentation: Document rules thoroughly to assist with maintenance and troubleshooting.
+
+  Version Control: Track changes to rules to manage versions effectively.
+
+
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="Example Rule" type="AttributeGenerator">
+  <Description>Describe your rule here.</Description>
+  <Source><![CDATA[
+
+  // Add your logic here.
+
+  ]]></Source>
+</Rule>
