@@ -28,6 +28,51 @@ Here's a more detailed look into each of the objects in SailPoint that BeanShell
       context.saveObject(identity);
    ```
 
+   ### **Methods**
+
+   1. **getAttribute(String name)**:
+      - **Usage**: Retrieves a specific attribute of the identity.
+      - **Example**: `String email = identity.getAttribute("email");`
+   
+   2. **setAttribute(String name, Object value)**:
+      - **Usage**: Sets or updates an attribute of the identity.
+      - **Example**: `identity.setAttribute("phoneNumber", "123-456-7890");`
+   
+   3. **getName()**:
+      - **Usage**: Retrieves the name of the identity.
+      - **Example**: `String identityName = identity.getName();`
+   
+   4. **getId()**:
+      - **Usage**: Retrieves the unique identifier of the identity.
+      - **Example**: `String identityId = identity.getId();`
+   
+   5. **getAccounts()**:
+      - **Usage**: Retrieves a list of accounts associated with the identity.
+      - **Example**: `List<Account> accounts = identity.getAccounts();`
+   
+   6. **addRole(Role role)**:
+      - **Usage**: Adds a role to the identity.
+      - **Example**: `identity.addRole(newRole);`
+   
+   7. **removeRole(Role role)**:
+      - **Usage**: Removes a role from the identity.
+      - **Example**: `identity.removeRole(existingRole);`
+   
+   8. **hasRole(Role role)**:
+      - **Usage**: Checks if the identity has a specific role.
+      - **Example**: `boolean hasAdminRole = identity.hasRole(adminRole);`
+   
+   9. **getRoles()**:
+      - **Usage**: Retrieves a list of roles assigned to the identity.
+      - **Example**: `List<Role> roles = identity.getRoles();`
+   
+   10. **addAccount(Account account)**:
+       - **Usage**: Adds an account to the identity.
+       - **Example**: `identity.addAccount(newAccount);`
+
+      
+      These methods are frequently used when developing rules and scripts in SailPoint to manage identities, their attributes, and their associated roles and accounts.
+
 ### 2. **Application Objects**:
    - **Application**: This object represents an external application integrated with SailPoint, like Active Directory or Salesforce. It contains connection details (e.g., URLs, credentials) and schema definitions (which attributes are available for reading/writing). It’s vital for managing how SailPoint interacts with other systems.
 
