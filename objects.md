@@ -200,3 +200,180 @@ Here's a more detailed look into each of the objects in SailPoint that BeanShell
    ```
 
 These objects form the core building blocks for creating rules in SailPoint, allowing for complex identity and access management tasks. Each object type has its specific role and is often used in combination with others to achieve desired outcomes in workflows and rule execution.
+
+---
+
+### **1. Custom Rules**
+
+**Purpose**: Custom rules allow you to extend SailPoint’s default behavior and implement specific business logic.
+
+**Examples and Use Cases**:
+
+- **Identity Rule Example**: You can create a rule to automatically assign a role based on an identity's department attribute. For example, if the department is "Finance," assign the "FinanceRole" role to the identity.
+  
+  ```java
+  import sailpoint.object.Identity;
+  import sailpoint.object.Role;
+  import sailpoint.api.SailPointContext;
+
+  public class AssignRoleBasedOnDepartment extends Rule {
+      @Override
+      public void execute(SailPointContext context, Identity identity) {
+          String department = identity.getAttribute("department");
+          if ("Finance".equals(department)) {
+              Role financeRole = context.getObjectByName(Role.class, "FinanceRole");
+              identity.addRole(financeRole);
+              context.saveObject(identity);
+          }
+      }
+  }
+  ```
+
+- **Application Rule Example**: A rule to modify how data is mapped between SailPoint and an external application during provisioning.
+
+  ```java
+  import sailpoint.object.Application;
+  import sailpoint.object.Identity;
+  import sailpoint.api.SailPointContext;
+
+  public class CustomProvisioningRule extends Rule {
+      @Override
+      public void execute(SailPointContext context, Identity identity, Application app) {
+          // Custom logic to transform identity data before provisioning
+          String customAttribute = transformData(identity.getAttribute("someAttribute"));
+          app.setAttribute("provisionedAttribute", customAttribute);
+          context.saveObject(app);
+      }
+
+      private String transformData(String data) {
+          // Transformation logic
+          return data.toUpperCase();
+      }
+  }
+  ```
+
+### **2. Workflows**
+
+**Purpose**: Workflows orchestrate complex business processes by defining sequences of steps or tasks.
+
+**Examples and Use Cases**:
+
+- **Onboarding Workflow**: Automate the onboarding process for new employees by creating a workflow that includes steps for provisioning access, assigning roles, and notifying managers.
+
+  ```java
+  import sailpoint.api.Workflow;
+  import sailpoint.object.Identity;
+
+  public class OnboardingWorkflow extends Workflow {
+      @Override
+      public void execute() {
+          // Define the workflow steps
+          step1();
+          step2();
+          step3();
+      }
+
+      private void step1() {
+          // Provisioning logic
+      }
+
+      private void step2() {
+          // Assign roles logic
+      }
+
+      private void step3() {
+          // Notify manager logic
+      }
+  }
+  ```
+
+### **3. Integrations**
+
+**Purpose**: Connect SailPoint with external systems or applications to synchronize data and manage integrations.
+
+**Examples and Use Cases**:
+
+- **Connector Example**: Define how SailPoint connects to an external HR system to synchronize employee data.
+
+  ```java
+  import sailpoint.api.Connector;
+  import sailpoint.object.Application;
+
+  public class HRConnector extends Connector {
+      @Override
+      public void connect() {
+          // Logic to connect to HR system
+      }
+
+      @Override
+      public void syncData(Application app) {
+          // Synchronize data between SailPoint and HR system
+      }
+  }
+  ```
+
+### **4. Policies**
+
+**Purpose**: Enforce rules and guidelines related to access and permissions.
+
+**Examples and Use Cases**:
+
+- **Compliance Policy Example**: Implement a policy to ensure that all users have multi-factor authentication enabled.
+
+  ```java
+  import sailpoint.api.Policy;
+  import sailpoint.object.Identity;
+
+  public class MFACompliancePolicy extends Policy {
+      @Override
+      public void checkCompliance(Identity identity) {
+          boolean mfaEnabled = identity.getAttribute("mfaEnabled");
+          if (!mfaEnabled) {
+              // Trigger a compliance alert or action
+          }
+      }
+  }
+  ```
+
+### **5. Event-Based Triggers**
+
+**Purpose**: Execute rules or workflows in response to specific events (e.g., identity creation).
+
+**Examples and Use Cases**:
+
+- **Event Trigger Example**: Configure an event to trigger a rule when a new identity is created to automatically assign default roles.
+
+  ```java
+  import sailpoint.api.Event;
+  import sailpoint.object.Identity;
+
+  public class NewIdentityEvent extends Event {
+      @Override
+      public void process(Identity identity) {
+          // Logic to assign default roles upon identity creation
+      }
+  }
+  ```
+
+### **6. Object Manipulation**
+
+**Purpose**: Use SailPoint objects to interact with and manipulate data.
+
+**Examples and Use Cases**:
+
+- **Identity Object Example**: Update an identity’s attributes based on a specific condition.
+
+  ```java
+  import sailpoint.api.SailPointContext;
+  import sailpoint.object.Identity;
+
+  public class UpdateIdentityAttributes {
+      public void updateAttributes(SailPointContext context, String identityId) {
+          Identity identity = context.getObjectById(Identity.class, identityId);
+          if (identity != null) {
+              identity.setAttribute("customAttribute", "newValue");
+              context.saveObject(identity);
+          }
+      }
+  }
+  ```
